@@ -75,7 +75,7 @@ interaction:
 
     >>> d = Dingus('root')
     >>> (2 ** d.something)['hello']() / 100 * 'foo'
-    <Dingus root.something.__rpow__[hello]().__div__.__mul__>
+    <Dingus root.something.__rpow__[hello]().__truediv__.__mul__>
 
 (Hopefully your real-world dingus recordings won't look like this!)
 
@@ -87,16 +87,16 @@ Dingus provides a context manager for patching objects during tests. For
 example:
 
     >>> from dingus import patch
-    >>> import urllib2
-    >>> with patch('urllib2.urlopen'):
-    ...     print urllib2.urlopen.__class__
+    >>> import urllib as urllib
+    >>> with patch('urllib.request.urlopen'):
+    ...     print(urllib.request.urlopen.__class__)
     <class 'dingus.Dingus'>
-    >>> print urllib2.urlopen.__class__
-    <type 'function'>
+    >>> print(urllib.request.urlopen.__class__)
+    <class 'function'>
 
 You can also use this as a decorator on your test methods:
 
-    >>> @patch('urllib2.urlopen')
+    >>> @patch('urllib.request.urlopen')
     ... def test_something(self):
     ...     pass
     ...
@@ -108,12 +108,12 @@ ISOLATION
 The opposite of patch is isolate. It patches everything except the named object:
 
     >>> from dingus import isolate
-    >>> @isolate('urllib2.urlparse')
+    >>> @isolate('urllib.urlparse')
     ... def test_urlparse(self):
     ...     pass
     ...
 
-When this test runs, everything in the urllib2 module except urlparse will be a
+When this test runs, everything in the urllib module except urlparse will be a
 dingus. Note that this may be slow to execute if the module contains many
 objects; performance patches are welcome. :)
 
@@ -123,7 +123,7 @@ DANGEROUS MAGIC
 
 Dingus can also automatically replace a module's globals when running tests.
 This allows you to write fully isolated unit tests. See
-examples/urllib2/test\_urllib2.py for an example. The author no longer
+examples/urllib/test\_urllib.py for an example. The author no longer
 recommends this feature, as it can encourage very brittle tests. You should
 feel the pain of manually mocking dependencies; the pain will tell you when a
 class collaborates with too many others.

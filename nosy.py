@@ -63,13 +63,13 @@ def print_changes(changed_paths):
     global iterations
     iterations += 1
 
-    print
-    print
-    print
-    print '----- Iteration', iterations, '(%s)' % time.ctime()
+    print()
+    print()
+    print()
+    print('----- Iteration', iterations, '(%s)' % time.ctime())
 
     if changed_paths:
-        print '      Changes:', ', '.join(sorted(changed_paths))
+        print('      Changes:', ', '.join(sorted(changed_paths)))
 
 
 def change_generator():

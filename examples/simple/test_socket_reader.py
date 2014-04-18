@@ -1,6 +1,6 @@
 from dingus import Dingus
 
-from socket_reader import read_socket
+from .socket_reader import read_socket
 
 
 class TestSocketReader:

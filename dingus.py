@@ -2,14 +2,14 @@ import sys
 from functools import wraps
 
 def DingusTestCase(object_under_test, exclude=None):
-    if isinstance(exclude, basestring):
+    if isinstance(exclude, str):
         raise ValueError("Strings not allowed for exclude. " +
                          "Use a list: exclude=['identifier']")
     exclude = [] if exclude is None else exclude
 
     def get_names_under_test():
         module = sys.modules[object_under_test.__module__]
-        for name, value in module.__dict__.iteritems():
+        for name, value in module.__dict__.items():
             if value is object_under_test or name in exclude:
                 yield name
 
@@ -24,7 +24,7 @@ def DingusTestCase(object_under_test, exclude=None):
 
         def _dingus_replace_module_globals(self, module):
             old_module_dict = module.__dict__.copy()
-            module_keys = set(module.__dict__.iterkeys())
+            module_keys = set(module.__dict__.keys())
 
             dunders = set(k for k in module_keys
                            if k.startswith('__') and k.endswith('__'))
@@ -160,7 +160,7 @@ class CallList(list):
             return False
         else:
             return all(name in kwargs and kwargs[name] in (DontCare, val)
-                       for name, val in call.kwargs.iteritems())
+                       for name, val in call.kwargs.items())
 
     def one(self):
         if len(self) == 1:
@@ -209,7 +209,7 @@ class Dingus(object):
         self.consumed_context_manager_exceptions = (
             consumed_context_manager_exceptions or [])
 
-        for attr_name, attr_value in kwargs.iteritems():
+        for attr_name, attr_value in kwargs.items():
             if attr_name.endswith('__returns'):
                 attr_name = attr_name.replace('__returns', '')
                 returner = self._create_child(attr_name)
@@ -332,7 +332,7 @@ class Dingus(object):
         operator_fn.__name__ = name
         return operator_fn
 
-    _BASE_OPERATOR_NAMES = ['add', 'and', 'div', 'lshift', 'mod', 'mul', 'or',
+    _BASE_OPERATOR_NAMES = ['add', 'and', 'floordiv', 'truediv', 'lshift', 'mod', 'mul', 'or',
                             'pow', 'rshift', 'sub', 'xor']
 
     def _infix_operator_names(base_operator_names):

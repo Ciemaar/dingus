@@ -64,8 +64,8 @@ class WhenThereIsNoCallsForTheMatchedArgs(AssertCallTest):
         try:
             dingus = getattr(self.ding, method)
             dingus.assert_call(*args, **kwargs)
-        except AssertionError, e:
-            self._assert_message(e.message, dingus, args, kwargs)
+        except AssertionError as e:
+            self._assert_message(e.args[0], dingus, args, kwargs)
         else:
             assert False, 'should not be here'
 

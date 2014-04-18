@@ -143,7 +143,7 @@ class WhenAccessingMagicAttributes:
         assert_raises(AttributeError, lambda: Dingus().__getnewargs__)
 
 
-INFIX_OPERATORS = ['add', 'and_', 'div', 'lshift', 'mod', 'mul', 'or_',
+INFIX_OPERATORS = ['add', 'and_', 'floordiv', 'truediv', 'lshift', 'mod', 'mul', 'or_',
                    'pow', 'rshift', 'sub', 'xor']
 
 

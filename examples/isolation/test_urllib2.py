@@ -1,17 +1,17 @@
 from dingus import DingusTestCase, DontCare
-import urllib2
-from urllib2 import urlopen
+import urllib as urllib
+from urllib.request import urlopen
 
 
 # We want to unit test the urlopen function. It's very small (as you can see
-# by looking at the source at ${PYTHON_INSTALL}/lib/python2.5/urllib2.py
+# by looking at the source at ${PYTHON_INSTALL}/lib/python2.5/urllib.py
 #
 # (This example assumes Python 2.5. Hopefully it also works for your version.)
 #
 # Dingus allows us to test urlopen without actually touching the network, or
 # any other classes and functions at all. When we define the test class, we
 # inherit from "DingusTestCase(urlopen)". DingusTestCase will define setup and
-# teardown method that replace every object in urllib2 with a dingus
+# teardown method that replace every object in urllib with a dingus
 # (except urlopen, which is the "object under test". It does this by looking
 # at the module that urlopen was defined in, making a backup copy of its
 # contents, then replacing everything with a dingus. So, instead of making
@@ -21,7 +21,7 @@ from urllib2 import urlopen
 class WhenOpeningURLs(DingusTestCase(urlopen)):
     def setup(self):
         # We have to call DingusTestCase's setup method so that it can
-        # modify the urllib2 module's contents.
+        # modify the urllib module's contents.
         super(WhenOpeningURLs, self).setup()
 
         # We set up the object under test here by calling urlopen with a URL.
@@ -34,7 +34,7 @@ class WhenOpeningURLs(DingusTestCase(urlopen)):
         # touch the network, disk, etc., but DingusTestCase has replaced it
         # with a dingus. We first grab that _opener object so we can make
         # assertions about it.
-        opener = urllib2._opener
+        opener = urllib.request._opener
 
         # We want to assert that urlopen should call "open" on the opener,
         # passing the URL we gave it. "open" also takes another argument, but
@@ -54,14 +54,14 @@ class WhenOpeningURLs(DingusTestCase(urlopen)):
 
     def should_return_opened_url(self):
         # Now we want to assert that the opened object is returned to the
-        # caller. The line of code from urllib2 that we're testing is:
+        # caller. The line of code from urllib that we're testing is:
         #     return _opener.open(url, data)
         # We need to make sure that urlopen returned the result of that. We do
         # that by accessing _opener.open.return_value. _opener.open is the
         # dingus that replaced the original _opener.open method. The
         # return_value is a special attribute of all dinguses that gets
         # returned when the dingus is called as a function.
-        assert self.opened_url is urllib2._opener.open.return_value
+        assert self.opened_url is urllib.request._opener.open.return_value
 
     # We could also define a teardown method for this test class, but that's
     # rarely needed when writing fully isolated tests like this one.

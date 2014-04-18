@@ -1,41 +1,41 @@
 from __future__ import with_statement
-import urllib2
+import urllib as urllib
 import os
 
 from dingus import Dingus, patch, isolate
 
 
 class WhenPatchingObjects:
-    @patch('urllib2.urlopen')
+    @patch('urllib.request.urlopen')
     def should_replace_object_with_dingus(self):
-        assert isinstance(urllib2.urlopen, Dingus)
+        assert isinstance(urllib.request.urlopen, Dingus)
 
     def should_restore_object_after_patched_function_exits(self):
-        @patch('urllib2.urlopen')
-        def patch_urllib2():
+        @patch('urllib.request.urlopen')
+        def patch_urllib():
             pass
-        patch_urllib2()
-        assert not isinstance(urllib2.urlopen, Dingus)
+        patch_urllib()
+        assert not isinstance(urllib.request.urlopen, Dingus)
 
     def should_be_usable_as_context_manager(self):
-        with patch('urllib2.urlopen'):
-            assert isinstance(urllib2.urlopen, Dingus)
-        assert not isinstance(urllib2.urlopen, Dingus)
+        with patch('urllib.request.urlopen'):
+            assert isinstance(urllib.request.urlopen, Dingus)
+        assert not isinstance(urllib.request.urlopen, Dingus)
 
     def should_be_able_to_provide_explicit_dingus(self):
         my_dingus = Dingus()
-        with patch('urllib2.urlopen', my_dingus):
-            assert urllib2.urlopen is my_dingus
+        with patch('urllib.request.urlopen', my_dingus):
+            assert urllib.request.urlopen is my_dingus
 
     def should_name_dingus_after_patched_object(self):
-        with patch('urllib2.urlopen'):
-            assert str(urllib2.urlopen) == '<Dingus urllib2.urlopen>'
+        with patch('urllib.request.urlopen'):
+            assert str(urllib.request.urlopen) == '<Dingus urllib.request.urlopen>'
 
     def should_set_wrapped_on_patched_function(self):
-        def urllib2():
+        def urllib():
             pass
-        patch_urllib2 = patch('urllib2.urlopen')(urllib2)
-        assert patch_urllib2.__wrapped__ == urllib2
+        patch_urllib = patch('urllib.request.urlopen')(urllib)
+        assert patch_urllib.__wrapped__ == urllib
 
 
 class WhenIsolating:
